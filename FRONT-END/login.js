@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const labelPassword = document.querySelector("label[for='password']");
   const useridError = document.getElementById('userid-error');
   const passwordError = document.getElementById('password-error');
-  const toggleBtn = document.getElementById('togglePassword');
+  // const toggleBtn = document.getElementById('togglePassword');
 
   // 기존 활성화 함수 유지 (포커스/입력 색 변경)
   function toggleActive(input, label) {
@@ -83,48 +83,39 @@ document.addEventListener('DOMContentLoaded', () => {
   // 로그인 버튼 검증 및 처리
   const loginBtn = document.querySelector('.bottom-area button');
   // 로그인 버튼 클릭 시 처리
-  loginBtn.addEventListener('click', (e) => {
+  loginBtn.addEventListener('click', async (e) => {
     e.preventDefault();
-    if (validate()) {
-      const userid = useridInput.value.trim();
-      const password = passwordInput.value.trim();
 
-      const storedUser = JSON.parse(localStorage.getItem('userInfo'));
+    if (!validate()) return;
 
-      if (!storedUser) {
-        // 저장된 정보가 없는 경우 (회원가입 안 했을 때)
-        setError(
-          useridInput,
-          labelUserid,
-          useridError,
-          '가입된 정보가 없습니다'
-        );
+    const userid = useridInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userid, password }),
+      });
+
+      if (!res.ok) {
+        const errMsg = await res.text();
+        // 서버에서 받은 메시지에 따라 클라이언트에서 처리
+        if (errMsg.includes('아이디')) {
+          setError(useridInput, labelUserid, useridError, errMsg);
+        } else if (errMsg.includes('비밀번호')) {
+          setError(passwordInput, labelPassword, passwordError, errMsg);
+        } else {
+          alert(errMsg); // 그 외 오류는 그냥 alert
+        }
         return;
       }
 
-      if (storedUser.userid !== userid) {
-        setError(
-          useridInput,
-          labelUserid,
-          useridError,
-          '존재하지 않는 아이디입니다'
-        );
-        return;
-      }
-
-      if (storedUser.password !== password) {
-        setError(
-          passwordInput,
-          labelPassword,
-          passwordError,
-          '비밀번호가 일치하지 않습니다'
-        );
-        return;
-      }
+      const data = await res.json(); // { field: 'AI/클라우드 분야' } 형식이라고 가정
 
       let redirectPage = 'home.html';
 
-      switch (storedUser.field) {
+      switch (data.field) {
         case '대학원 진학형':
           redirectPage = 'daehakwon.html';
           break;
@@ -140,6 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       window.location.href = redirectPage;
+    } catch (err) {
+      alert('로그인 중 문제가 발생했습니다: ' + err.message);
     }
   });
 });

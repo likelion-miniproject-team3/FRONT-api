@@ -1,79 +1,3 @@
-const subjects = [
-  {
-    name: '인공지능 개론',
-    year: 1,
-    semester: '1학기·3학점',
-    type: 'required',
-    desc: '인공지능의 기본 개념과 역사, 대표적인 알고리즘 <br> (기계학습, 신경망 등)에 대해 전반적으로 소개합니다.',
-    followup: '선이수 과목: 데이터분석기초 ⇆ 후속 과목: AI 시스템 활용',
-  },
-  {
-    name: '프로그래밍 기초',
-    year: 2,
-    semester: '1학기·2학점',
-    type: 'required',
-    desc: '컴퓨터 프로그래밍의 기초적인 구조를 파악하고, <br> 파이썬 또는 C언어를 활용하여 문제 해결 능력을 기릅니다.',
-    followup: '후속 과목: 객체지향 프로그램, SW/HW 통합설계, AI시스템활용',
-  },
-  {
-    name: '통계 기초',
-    year: 2,
-    semester: '1학기·3학점',
-    type: 'required',
-    desc: '평균, 분산, 확률 분포, 정규분포 등 통계 이론을<br> 배우며, 데이터 해석 및 판단의 기초 논리를 학습합니다.',
-    followup: '선이수 과목: 미적분학 ⇆ 후속 과목: 통계실무, 데이터분석기초',
-  },
-  {
-    name: '인공지능 수학',
-    year: 2,
-    semester: '1학기·3학점',
-    type: 'required',
-    desc: '인공지능 알고리즘에 필요한 행렬 연산 등을 다루며,<br> AI 모델 수학적 이해를 도와주는 수학 중심 과목입니다.',
-    followup: '선이수 과목: 미적분학, 통계기초 ⇆ 후속 과목: 인공지능개론',
-  },
-  {
-    name: 'SW/HW <br> 플랫폼 설계',
-    year: 2,
-    semester: '2학기·3학점',
-    type: 'required',
-    desc: '임베디드 시스템을 기반으로 하드웨어와 소프트웨어를<br> 통합 설계하는 과목. 센서 연동, 장치 제어 등을 실습합니다.',
-    followup: '선이수 과목: 운영체제, 자료구조 ⇆ 후속 과목: 멀티모달 학습',
-  },
-  {
-    name: '데이터마이닝 <br> 및 응용실습',
-    year: 3,
-    semester: '1학기·3학점',
-    type: 'required',
-    desc: '방대한 데이터를 분석해 숨겨진 패턴, 군집 등 <br> 유용한 정보를 추출하는 실습 위주로 구성되어 있습니다.',
-    followup:
-      '선이수 과목: 데이터분석기초, 통계기초 ⇆ 후속 과목: AI 시스템 활용',
-  },
-  {
-    name: '인공지능 플랫폼 <br>설계',
-    year: 3,
-    semester: '1학기·3학점',
-    type: 'required',
-    desc: 'AI 시스템을 실제 서비스 환경에 배포하고 <br> 운영하기 위한 플랫폼 구조를 설계하는 과목입니다.',
-    followup: '선이수 과목: 인공지능개론 ⇆ 후속 과목: AI 프로젝트 실습 과목',
-  },
-  {
-    name: '딥러닝',
-    year: 3,
-    semester: '1학기·3학점',
-    type: 'elective',
-    desc: 'CNN, RNN 등 대표적인 딥러닝 구조와 <br> 학습 알고리즘을 배우며, 모델 구현을 실습합니다.',
-    followup: '선이수 과목: 인공지능개론 ⇆ 후속 과목: AI 시스템 활용',
-  },
-  {
-    name: '멀티모달 학습',
-    year: 3,
-    semester: '1학기·3학점',
-    type: 'elective',
-    desc: '이미지+텍스트, 음성+영상 등 다양한 유형의 <br> 데이터를 통합해 학습하는 최신 AI 기법을 다룹니다.',
-    followup: '선이수 과목: 딥러닝 ⇆ 후속 과목: 복합 AI 분석 프로젝트',
-  },
-];
-
 const searchInput = document.getElementById('searchInput');
 const yearButtons = document.querySelectorAll('.year-buttons button');
 const requiredContainer = document.getElementById('required-subjects');
@@ -82,7 +6,35 @@ const navItems = document.querySelectorAll('.nav-item');
 const subjectDetailList = document.getElementById('subject-detail-list');
 
 let currentYear = 1;
+let subjects = []; // API에서 받아온 데이터 저장
 
+// 1. 과목 데이터 불러오기
+async function fetchSubjects() {
+  try {
+    const res = await fetch('/api/majors/courses');
+    if (!res.ok) throw new Error('과목 정보를 불러오지 못했습니다.');
+    subjects = await res.json();
+    renderSubjects(currentYear, searchInput.value);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// 2. 검색 시 호출 (선택)
+async function searchSubjects(query) {
+  try {
+    const res = await fetch(
+      `/api/majors/courses?q=${encodeURIComponent(query)}`
+    );
+    if (!res.ok) throw new Error('검색 실패');
+    subjects = await res.json();
+    renderSubjects(currentYear, query);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// 3. 과목 카드 렌더링
 function renderSubjects(year, query = '') {
   requiredContainer.innerHTML = '';
   electiveContainer.innerHTML = '';
@@ -102,7 +54,6 @@ function renderSubjects(year, query = '') {
     card.classList.add(
       sub.type === 'required' ? 'required-card' : 'elective-card'
     );
-
     if (query && sub.name.includes(query)) {
       card.classList.add('match');
     }
@@ -117,10 +68,16 @@ function renderSubjects(year, query = '') {
         <div class="subject-buttons">
           ${
             sub.type === 'required'
-              ? `<button class="complete-button"><i class="fas fa-check"></i> 수강완료</button>`
+              ? `<button class="complete-button" data-course-id="${sub.id}">
+                   <i class="fas fa-check"></i> 수강완료
+                 </button>`
               : `
-                <button class="add-button"><i class="fas fa-plus"></i> 담기</button>
-                <button class="complete-button"><i class="fas fa-check"></i> 수강</button>
+                <button class="add-button" data-course-id="${sub.id}">
+                  <i class="fas fa-plus"></i> 담기
+                </button>
+                <button class="complete-button" data-course-id="${sub.id}">
+                  <i class="fas fa-check"></i> 수강
+                </button>
               `
           }
         </div>
@@ -138,15 +95,56 @@ function renderSubjects(year, query = '') {
   renderSubjectTextInfo(year);
 }
 
+// 4. 버튼 동작
 function setupButtonToggle() {
-  const buttons = document.querySelectorAll('.subject-buttons button');
-  buttons.forEach((btn) => {
+  document.querySelectorAll('.add-button').forEach((btn) => {
     btn.addEventListener('click', () => {
       btn.classList.toggle('selected');
+      const courseId = btn.dataset.courseId;
+      addToBookmark(courseId);
+    });
+  });
+
+  document.querySelectorAll('.complete-button').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('selected');
+      const courseId = btn.dataset.courseId;
+      markAsCompleted(courseId);
     });
   });
 }
 
+// 5. 수강바구니 API 호출
+async function addToBookmark(courseId) {
+  try {
+    const res = await fetch('/api/bookmarks', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ courseId }),
+    });
+    if (!res.ok) throw new Error('수강바구니 담기 실패');
+    alert('수강바구니에 담았습니다!');
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// 6. 수강완료 API 호출
+async function markAsCompleted(courseId) {
+  try {
+    const res = await fetch('/api/enrollments', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ courseId }),
+    });
+    if (!res.ok) throw new Error('수강완료 등록 실패');
+    alert('수강 완료로 등록했습니다!');
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// 7. 과목 설명 리스트 렌더링
 function renderSubjectTextInfo(year) {
   subjectDetailList.innerHTML = '';
   const filtered = subjects.filter((sub) => sub.year === year);
@@ -171,11 +169,17 @@ function renderSubjectTextInfo(year) {
   );
   reviewButtons.forEach((btn, idx) => {
     btn.addEventListener('click', () => {
-      alert(`'${filtered[idx].name}' 과목의 수강평 페이지로 이동합니다.`);
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = filtered[idx].name;
+      const subjectName = tempDiv.textContent.trim();
+      window.location.href = `review.html?subject=${encodeURIComponent(
+        subjectName
+      )}`;
     });
   });
 }
 
+// 8. 학년 버튼 이벤트
 yearButtons.forEach((button) => {
   button.addEventListener('click', () => {
     currentYear = parseInt(button.value);
@@ -185,10 +189,17 @@ yearButtons.forEach((button) => {
   });
 });
 
+// 9. 검색 이벤트
 searchInput.addEventListener('input', () => {
-  renderSubjects(currentYear, searchInput.value);
+  const keyword = searchInput.value.trim();
+  if (keyword === '') {
+    renderSubjects(currentYear);
+  } else {
+    searchSubjects(keyword);
+  }
 });
 
+// 10. 네비게이션 하단 선택 이벤트
 navItems.forEach((item) => {
   item.addEventListener('click', () => {
     navItems.forEach((i) => i.classList.remove('selected'));
@@ -196,9 +207,10 @@ navItems.forEach((item) => {
   });
 });
 
+// 11. 최초 실행 시
 document.addEventListener('DOMContentLoaded', () => {
   document
     .querySelector(`.year-buttons button[value="1"]`)
     .classList.add('selected');
-  renderSubjects(1);
+  fetchSubjects(); // API로 과목 불러오기
 });

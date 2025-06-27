@@ -294,28 +294,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  submitBtn.addEventListener('click', () => {
-    if (validateStep4()) {
-      const field = selectedFieldText.textContent.trim(); // 여기만 수정
+  submitBtn.addEventListener('click', async () => {
+    if (!validateStep4()) return;
 
-      let redirectPage = 'home.html'; // 기본값
+    const field = selectedFieldText.textContent.trim();
+    console.log('선택된 분야:', field); // ✅ 추가
 
-      switch (field) {
-        case '대학원 진학형':
-          redirectPage = 'daehakwon.html';
-          break;
-        case '빅데이터 분야':
-          redirectPage = 'bigdata.html';
-          break;
-        case 'AI/클라우드 분야':
-          redirectPage = 'ai.html';
-          break;
-        case '마이크로 전공형':
-          redirectPage = 'micro.html';
-          break;
+    try {
+      const res = await fetch('/api/auth/register/step4', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ field }),
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text(); // ❗️서버 에러 메시지 확인
+        throw new Error('4단계 등록 실패: ' + errorText);
       }
 
-      // 나머지 로직 유지
+      console.log('서버 응답 성공! confetti 실행');
+
+      // 여기부터가 화면 전환 부분
       document.querySelector('.top-bar').style.display = 'none';
       document.querySelectorAll('.step').forEach((el) => {
         el.style.display = 'none';
@@ -350,9 +349,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       document.body.appendChild(container);
       document.body.appendChild(confirmBtn);
-      fillBar.style.width = '25%';
-
-      document.querySelectorAll('input').forEach((input) => (input.value = ''));
+    } catch (err) {
+      alert(err.message); // ❗️실패 사유 표시
     }
   });
 
@@ -417,6 +415,34 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  nextBtn1.addEventListener('click', async () => {
+    const username = step1Inputs[0].value.trim();
+    const usernickname = step1Inputs[1].value.trim();
+    const useremail = step1Inputs[2].value.trim();
+    const usernumber = step1Inputs[3].value.trim();
+
+    try {
+      const res = await fetch('/api/auth/register/step1', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username,
+          nickname: usernickname,
+          email: useremail,
+          studentNumber: usernumber,
+        }),
+      });
+
+      if (!res.ok) throw new Error('1단계 등록 실패');
+
+      // 성공한 경우에만 넘어가기
+      showStep(1);
+    } catch (err) {
+      alert(err.message);
+    }
+  });
+
   const useridInput = document.getElementById('userid');
   const nextBtn2 = document.getElementById('next2');
 
@@ -427,6 +453,27 @@ document.addEventListener('DOMContentLoaded', () => {
       nextBtn2.classList.remove('active');
     }
   });
+
+  nextBtn2.addEventListener('click', async () => {
+    const userId = useridInput.value.trim();
+
+    if (!validateStep2()) return;
+
+    try {
+      const res = await fetch('/api/auth/register/step2', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId }),
+      });
+
+      if (!res.ok) throw new Error('2단계 등록 실패');
+
+      showStep(2);
+    } catch (err) {
+      alert(err.message);
+    }
+  });
+
   const passwordInput = document.getElementById('password');
   const passwordCheckInput = document.getElementById('password-check');
   const nextBtn3 = document.getElementById('next3');
@@ -441,6 +488,27 @@ document.addEventListener('DOMContentLoaded', () => {
       nextBtn3.classList.remove('active');
     }
   }
+
+  nextBtn3.addEventListener('click', async () => {
+    const password = passwordInput.value.trim();
+    const passwordCheck = passwordCheckInput.value.trim();
+
+    if (!validateStep3()) return;
+
+    try {
+      const res = await fetch('/api/auth/register/step3', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+
+      if (!res.ok) throw new Error('3단계 등록 실패');
+
+      showStep(3);
+    } catch (err) {
+      alert(err.message);
+    }
+  });
 
   passwordInput.addEventListener('input', validatePasswords);
   passwordCheckInput.addEventListener('input', validatePasswords);
