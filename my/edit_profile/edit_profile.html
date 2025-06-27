@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>내 정보 수정</title>
+    <link rel="stylesheet" href="/my/edit_profile/edit_profile.css" />
+  </head>
+  <body>
+    <!-- 뒤로가기 버튼 -->
+    <div class="back-button-wrapper">
+      <button onclick="window.location.href='/my/my.html'" class="back-button">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="28"
+          height="28"
+          fill="#333"
+          viewBox="0 0 24 24"
+        >
+          <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="edit-container">
+      <h2 class="title">내 정보 수정</h2>
+
+      <!-- 프로필 이미지 영역 -->
+      <div class="profile-area">
+        <div class="profile-img-wrapper">
+          <div class="profile-img"></div>
+          <button class="camera-btn">
+            <img src="camera.png" alt="카메라 아이콘" />
+          </button>
+
+          <!-- 팝업 메뉴 -->
+          <ul class="upload-options hidden" id="uploadOptions">
+            <li id="galleryOption">
+              <span>사진 보관함</span>
+              <img
+                src="/my/edit_profile/gallery.png"
+                alt="사진 보관함 아이콘"
+                class="icon-gallery"
+              />
+            </li>
+            <hr class="upload-divider" />
+            <li id="fileOption">
+              <span>파일 선택</span>
+              <img
+                src="/my/edit_profile/file.png"
+                alt="파일 선택 아이콘"
+                class="icon-file"
+              />
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- ← profile-area 닫힘 -->
+
+      <!-- 내 정보 카드 영역 -->
+      <div class="info-cards">
+        <!-- 닉네임 -->
+        <div class="info-card nickname-card">
+          <label>닉네임</label>
+          <span id="nicknameDisplay">닉네임</span>
+          <button
+            onclick="window.location.href='/my/edit_nickname/edit_nickname.html'"
+            class="nickname-arrow-btn"
+            aria-label="닉네임 수정"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"
+                fill="#3a66e6"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- 학번 -->
+        <div class="info-card">
+          <label>학번</label>
+          <span id="studentNumberDisplay">학번</span>
+        </div>
+
+        <!-- 이메일 -->
+        <div class="info-card">
+          <label>이메일</label>
+          <span id="emailDisplay">이메일</span>
+        </div>
+      </div>
+    </div>
+    <!-- ← edit-container 닫힘 -->
+
+    <footer class="bottom-nav">
+      <a href="home.html" class="nav-item">
+        <!-- 집 아이콘 -->
+        <svg
+          width="24"
+          height="24"
+          fill="#aaa"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M3 9.75L12 3l9 6.75V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.75Z"
+          />
+        </svg>
+        <span>홈</span>
+      </a>
+
+      <a href="/review/review.html" class="nav-item">
+        <!-- 문서 아이콘 -->
+        <svg
+          width="24"
+          height="24"
+          fill="#aaa"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M6 2a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6H6Zm7 1.5L18.5 9H13a.5.5 0 0 1-.5-.5V3.5ZM8 13h8v1.5H8V13Zm0 3h8V17H8v-1.5Z"
+          />
+        </svg>
+        <span>후기</span>
+      </a>
+
+      <a href="/my/my.html" class="nav-item active">
+        <!-- 사람 아이콘 -->
+        <svg
+          width="24"
+          height="24"
+          fill="#aaa"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M12 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10ZM4 20c0-3.3 2.7-6 6-6h4c3.3 0 6 2.7 6 6v1H4v-1Z"
+          />
+        </svg>
+        <span>마이</span>
+      </a>
+    </footer>
+
+    <script src="/my/edit_profile/edit_profile.js"></script>
+  </body>
+</html>

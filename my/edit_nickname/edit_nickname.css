@@ -1,0 +1,143 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background-color: #f7f8fd;
+}
+
+.nickname-edit-container {
+  padding: 20px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
+}
+
+/* 상단 바 */
+.top-bar {
+  position: relative;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.back-btn {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0 12px;
+  cursor: pointer;
+}
+
+.top-title {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  color: #000;
+}
+
+/* 뒤로가기 버튼 */
+.back-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* 안내 문구 */
+.instruction {
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #000;
+}
+
+/* 입력창 */
+.input-wrapper {
+  margin-bottom: auto;
+}
+
+#nicknameInput {
+  width: 100%;
+  padding: 14px;
+  font-size: 15px;
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 0 0 1px #ddd;
+  background-color: white;
+  box-sizing: border-box;
+}
+
+/* 버튼 */
+/* 기본 상태 (비활성) */
+.submit-btn {
+  width: calc(100% - 40px);
+  margin: 0 auto;
+  margin-top: 32px;
+  margin-bottom: 80px; /* ← 기존보다 더 크게 (하단바 높이만큼) */
+  padding: 14px 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #3a66e6;
+  border: 1px solid #3a66e6;
+  border-radius: 12px;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+/* 활성 상태 (파란 배경, 흰 글씨) */
+.submit-btn.active {
+  background-color: #3a66e6;
+  color: white;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: white;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start; /* ← 위로 몰리지 않게 조절 */
+  padding-top: 15px;
+  z-index: 100;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  font-size: 12px;
+  color: #aaa;
+  text-decoration: none;
+  padding-bottom: 50px;
+}
+
+.nav-item svg {
+  display: block;
+  margin: 0 auto 4px;
+}
+
+.nav-item span {
+  margin-top: 4px; /* 아이콘과 글자 사이 */
+}
+
+.nav-item.active span {
+  color: #3b6ef7;
+}
+
+.nav-item.active svg {
+  fill: #3b6ef7;
+}
