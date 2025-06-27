@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>마이페이지</title>
+    <link rel="stylesheet" href="my.css" />
+  </head>
+  <body>
+    <div class="mypage-header">
+      <h2>마이페이지</h2>
+    </div>
+    <div class="mypage">
+      <!-- 프로필 영역 -->
+      <div class="section profile">
+        <div class="profile-img">사진</div>
+        <div class="profile-name" id="userNameDisplay">사용자 이름</div>
+        <a href="edit_profile.html" class="edit-info">내 정보 수정</a>
+      </div>
+
+      <!-- 구분선 -->
+      <div class="divider"></div>
+
+      <!-- 전공 이수학점 영역 -->
+      <div class="section progress-section">
+        <div class="progress-text">
+          전공 학점, 70% 달성<br />조금만 더 힘내요!
+        </div>
+        <div class="progress-circle">
+          <div class="percent">70%</div>
+        </div>
+        <div class="progress-detail">
+          취득학점 (46/70)<br />미달학점 (24/70)
+        </div>
+      </div>
+
+      <!-- 구분선 -->
+      <div class="divider"></div>
+    </div>
+
+    <!-- 하단 네비게이션 -->
+    <footer class="bottom-nav">
+      <a href="home.html" class="nav-item">
+        <!-- 집 아이콘 -->
+        <svg
+          width="24"
+          height="24"
+          fill="#aaa"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M3 9.75L12 3l9 6.75V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.75Z"
+          />
+        </svg>
+        <span>홈</span>
+      </a>
+
+      <a href="review.html" class="nav-item">
+        <!-- 문서 아이콘 -->
+        <svg
+          width="24"
+          height="24"
+          fill="#aaa"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M6 2a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6H6Zm7 1.5L18.5 9H13a.5.5 0 0 1-.5-.5V3.5ZM8 13h8v1.5H8V13Zm0 3h8V17H8v-1.5Z"
+          />
+        </svg>
+        <span>후기</span>
+      </a>
+
+      <a href="my.html" class="nav-item active">
+        <!-- 사람 아이콘 -->
+        <svg
+          width="24"
+          height="24"
+          fill="#aaa"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M12 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10ZM4 20c0-3.3 2.7-6 6-6h4c3.3 0 6 2.7 6 6v1H4v-1Z"
+          />
+        </svg>
+        <span>마이</span>
+      </a>
+    </footer>
+
+    <!-- JS 연결 -->
+    <script src="my.js"></script>
+  </body>
+</html>

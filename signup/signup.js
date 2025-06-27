@@ -297,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
   submitBtn.addEventListener('click', async () => {
     if (!validateStep4()) return;
 
-<<<<<<< HEAD:FRONT-END/signup.js
+    //  HEAD:FRONT-END/signup.js
     const field = selectedFieldText.textContent.trim();
     console.log('선택된 분야:', field); // ✅ 추가
 
@@ -311,7 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!res.ok) {
         const errorText = await res.text(); // ❗️서버 에러 메시지 확인
         throw new Error('4단계 등록 실패: ' + errorText);
-=======
+      }
       let redirectPage = '/home/home.html'; // 기본값
 
       switch (field) {
@@ -327,7 +327,6 @@ document.addEventListener('DOMContentLoaded', () => {
         case '마이크로 전공형':
           redirectPage = location.origin + '/home/micro/micro.html';
           break;
->>>>>>> 7abb00215ca7ed08cc53b2e9dec4d96a2ff71a5a:signup/signup.js
       }
 
       console.log('서버 응답 성공! confetti 실행');
