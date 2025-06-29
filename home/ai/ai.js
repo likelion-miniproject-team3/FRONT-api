@@ -31,10 +31,21 @@ async function renderSubjects(query = '') {
 
   const subjects = await fetchSubjects(query);
 
-  subjects.forEach((sub) => {
+  const matched = subjects.filter((s) => s.name.includes(query));
+  const unmatched = subjects.filter((s) => !s.name.includes(query));
+  const ordered = [...matched, ...unmatched];
+
+  ordered.forEach((sub) => {
     const card = document.createElement('div');
+
+    if (query && sub.name.includes(query)) {
+      card.classList.add('match');
+    }
+
     card.className = 'subject-card';
-    card.classList.add(sub.type === 'required' ? 'required-card' : 'elective-card');
+    card.classList.add(
+      sub.type === 'required' ? 'required-card' : 'elective-card'
+    );
 
     card.innerHTML = `
       <div class="subject-header"><i class="fas fa-chevron-right"></i></div>
@@ -62,7 +73,7 @@ async function renderSubjects(query = '') {
   });
 
   setupButtonEvents();
-  renderSubjectTextInfo(subjects);
+  renderSubjectTextInfo(ordered);
 }
 
 // 버튼 API 동기화
@@ -75,7 +86,7 @@ function setupButtonEvents() {
       const res = await fetch(`/api/bookmarks${added ? `/${id}` : ''}`, {
         method: added ? 'DELETE' : 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: added ? null : JSON.stringify({ courseId: id })
+        body: added ? null : JSON.stringify({ courseId: id }),
       });
 
       if (res.ok) {
@@ -95,7 +106,7 @@ function setupButtonEvents() {
       const res = await fetch(`/api/enrollments${complete ? `/${id}` : ''}`, {
         method: complete ? 'DELETE' : 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: complete ? null : JSON.stringify({ courseId: id })
+        body: complete ? null : JSON.stringify({ courseId: id }),
       });
 
       if (res.ok) {
@@ -160,6 +171,8 @@ navItems.forEach((item) => {
 
 // 초기 렌더링
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelector('.year-buttons button[value="1"]').classList.add('selected');
+  document
+    .querySelector('.year-buttons button[value="1"]')
+    .classList.add('selected');
   renderSubjects();
 });
