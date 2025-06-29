@@ -29,7 +29,15 @@ async function renderSubjects(query = '') {
   requiredContainer.innerHTML = '';
   electiveContainer.innerHTML = '';
 
-  const subjects = await fetchSubjects(query);
+  const rawData = await fetchSubjects(query);
+  const subjects = rawData.map((s) => ({
+    id: s.id,
+    name: s.name,
+    desc: s.description,
+    semester: `${s.semester}학기·${s.credit}학점`,
+    type: s.required ? 'required' : 'elective',
+    year: s.year,
+  }));
 
   const matched = subjects.filter((s) => s.name.includes(query));
   const unmatched = subjects.filter((s) => !s.name.includes(query));
@@ -37,12 +45,13 @@ async function renderSubjects(query = '') {
 
   ordered.forEach((sub) => {
     const card = document.createElement('div');
+    card.classList.add('subject-card');
 
     if (query && sub.name.includes(query)) {
       card.classList.add('match');
     }
 
-    card.className = 'subject-card';
+    // card.className = 'subject-card';
     card.classList.add(
       sub.type === 'required' ? 'required-card' : 'elective-card'
     );
